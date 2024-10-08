@@ -16,6 +16,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireSample.ProcessApi", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessFunctions", "ProcessFunctions\ProcessFunctions.csproj", "{1AE93383-0C0B-41BD-8802-ADE36B7FDA12}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{8CA9E444-BEEA-4B23-BF0A-470287CBC611}"
+	ProjectSection(SolutionItems) = preProject
+		..\lazvard-message\config.toml = ..\lazvard-message\config.toml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
