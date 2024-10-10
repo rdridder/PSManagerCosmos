@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspireSample.ProcessApi.ErrorHandling
 {
@@ -20,11 +21,17 @@ namespace AspireSample.ProcessApi.ErrorHandling
             _logger.LogError(
                 exception, "Exception occurred: {Message}", exception.Message);
 
-            var problemDetails = new ProblemDetails
+            var problemDetails = new ProblemDetails();
+            if (exception is InvalidOperationException)
             {
-                Status = StatusCodes.Status500InternalServerError,
-                Title = "Server error"
-            };
+                problemDetails.Title = exception.Message;
+                problemDetails.Status = StatusCodes.Status400BadRequest;
+            }
+            else {
+                problemDetails.Title = "Server error";
+                problemDetails.Status = StatusCodes.Status500InternalServerError;
+
+            }
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;
 

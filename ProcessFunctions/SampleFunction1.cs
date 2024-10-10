@@ -16,8 +16,9 @@ namespace SampleFunctions
         }
 
         [Function(nameof(SampleFunction1))]
-        public async Task Run(
-            [ServiceBusTrigger("sample-function-1", "sample-function-1-subscription", Connection = "ConnectionString")]
+        [ServiceBusOutput("process-task-finished", Connection = "ASB")]
+        public async Task<string> Run(
+            [ServiceBusTrigger("sample-function-1", "sample-function-1-subscription", Connection = "ASB")]
             ServiceBusReceivedMessage message,
             ServiceBusMessageActions messageActions)
         {
@@ -27,6 +28,8 @@ namespace SampleFunctions
 
              // Complete the message
             await messageActions.CompleteMessageAsync(message);
+            var outputMessage = $"Output message created at {DateTime.Now}";
+            return outputMessage;
         }
     }
 }

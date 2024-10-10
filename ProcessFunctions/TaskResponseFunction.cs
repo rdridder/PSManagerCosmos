@@ -17,7 +17,7 @@ namespace ProcessFunctions
 
         [Function(nameof(TaskResponseFunction))]
         public async Task Run(
-            [ServiceBusTrigger("process-created", Connection = "ConnectionString")]
+            [ServiceBusTrigger("process-task-finished", "process-task-finished-subscription-core", Connection = "ASB")]
             ServiceBusReceivedMessage message,
             ServiceBusMessageActions messageActions)
         {

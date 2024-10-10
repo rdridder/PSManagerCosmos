@@ -27,7 +27,6 @@ namespace AspireSample.ProcessApi.Controllers
             _mapper = mapper;
             _serviceBusClient = serviceBusClient;
 
-
             if (!_ensureCreated)
             {
                 _dbContext.Database.EnsureCreated();
@@ -91,6 +90,7 @@ namespace AspireSample.ProcessApi.Controllers
             SetNewlyCreated(process, dateTime);
             var addedProcess = await _dbContext.AddAsync(process);
             await _dbContext.SaveChangesAsync();
+            await SendStartTaskMessage(addedProcess.Entity);
             return Ok(addedProcess.Entity);
         }
 
@@ -107,8 +107,12 @@ namespace AspireSample.ProcessApi.Controllers
             return Ok(addedProcessTaskDefinition.Entity);
         }
 
-        private async Task SendStartTaskMessage(Process process) { 
-
+        private async Task SendStartTaskMessage(Process process) {
+            // TODO, check how to use enums properly
+            var task = (process.Tasks?.FirstOrDefault(x => x.Status == "PENDING")) ?? throw new InvalidOperationException($"No task with status pending found for process: {process.Id}");
+            var sender = _serviceBusClient.CreateSender(task.TopicName);
+            await sender.SendMessageAsync(new ServiceBusMessage("Test message"));
+            await sender.DisposeAsync();
         }
     }
 }
