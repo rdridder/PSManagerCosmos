@@ -1,4 +1,5 @@
 ﻿using AspireSample.ProcessApi.Data;
+using AspireSample.ProcessApi.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspireSample.ProcessApi.Context
@@ -15,6 +16,13 @@ namespace AspireSample.ProcessApi.Context
 
         public DbSet<ProcessTaskDefinition> ProcessTaskDefinition { get; set; }
 
+        // Does not seem to work with Cosmos, now set on the model explicitly
+        //protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        //{
+        //    base.ConfigureConventions(configurationBuilder);
+        //    configurationBuilder.Properties<Enum>().HaveConversion<string>();
+        //}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.HasDefaultContainer("Process");
@@ -24,6 +32,10 @@ namespace AspireSample.ProcessApi.Context
              .HasPartitionKey(c => c.Id)
              .HasNoDiscriminator()
              .OwnsMany(c => c.Tasks);
+
+    //        builder.Entity<Process>().Property(c => c.Status).HasConversion(
+    //v => v.ToString(),
+    //v => (Status)Enum.Parse(typeof(Status), v, true));
 
             builder.Entity<ProcessTaskDefinition>()
              .ToContainer(nameof(ProcessTaskDefinition))

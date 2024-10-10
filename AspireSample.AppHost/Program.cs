@@ -19,4 +19,7 @@ builder.AddProject<Projects.AspireSample_ProcessApi>("aspiresample-processapi");
 
 builder.AddProject<Projects.ProcessFunctions>("processfunctions");
 
+//builder.AddProject<Projects.SampleFunctions>("samplefunctions");
+
+
 builder.Build().Run();

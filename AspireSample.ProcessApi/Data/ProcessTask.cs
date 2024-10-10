@@ -1,4 +1,5 @@
-﻿using AspireSample.ProcessApi.Data.Interfaces;
+﻿using AspireSample.ProcessApi.Data.Enums;
+using AspireSample.ProcessApi.Data.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspireSample.ProcessApi.Data
@@ -16,6 +17,12 @@ namespace AspireSample.ProcessApi.Data
         
         [Required, MaxLength(96)]
         public string? TopicName { get; set; }
+
+        [Required]
+        public string Status { get; set; } = Enums.Status.PENDING.ToString();
+
+        [Required]
+        public int Version { get; set; } = 1;
 
         [Required]
         public DateTime? Created { get; set; }

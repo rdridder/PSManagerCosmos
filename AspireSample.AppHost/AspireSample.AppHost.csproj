@@ -14,6 +14,7 @@
     <ProjectReference Include="..\AspireSample.ProcessApi\AspireSample.ProcessApi.csproj" />
     <ProjectReference Include="..\AspireSample.Web\AspireSample.Web.csproj" />
     <ProjectReference Include="..\ProcessFunctions\ProcessFunctions.csproj" />
+    <ProjectReference Include="..\SampleFunctions\SampleFunctions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

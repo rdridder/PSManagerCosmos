@@ -12,6 +12,10 @@ namespace AspireSample.ProcessApi.DTO.Read
         
         public string? TopicName { get; set; }
 
+        public string? Status { get; set; }
+
+        public int Version { get; set; } = 1;
+
         public DateTime? Created { get; set; }
 
         public DateTime? Modified { get; set; }

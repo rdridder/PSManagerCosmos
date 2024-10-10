@@ -3,6 +3,7 @@ using AspireSample.ProcessApi.Data;
 using AspireSample.ProcessApi.Data.Interfaces;
 using AspireSample.ProcessApi.DTO.Write;
 using AutoMapper;
+using Azure.Messaging.ServiceBus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,23 @@ namespace AspireSample.ProcessApi.Controllers
 
         private readonly IMapper _mapper;
 
+        private readonly ServiceBusClient _serviceBusClient;
+
         private static bool _ensureCreated { get; set; } = false;
+
+        public ProcessInsertController(ProcessContext dbContext, IMapper mapper, ServiceBusClient serviceBusClient)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+            _serviceBusClient = serviceBusClient;
+
+
+            if (!_ensureCreated)
+            {
+                _dbContext.Database.EnsureCreated();
+                _ensureCreated = true;
+            }
+        }
 
         private void SetNewlyCreated(ITimestamped item, DateTime utcDateTime) {
             item.Created = utcDateTime;
@@ -25,19 +42,6 @@ namespace AspireSample.ProcessApi.Controllers
 
         private void SetUpdated(ITimestamped item, DateTime utcDateTime) {
             item.Modified = utcDateTime;
-        }
-
-        public ProcessInsertController(ProcessContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-
-
-            if (!_ensureCreated)
-            {
-                _dbContext.Database.EnsureCreated();
-                _ensureCreated = true;
-            }
         }
 
         [HttpPost("processDefinition")]
@@ -101,6 +105,10 @@ namespace AspireSample.ProcessApi.Controllers
             var addedProcessTaskDefinition = await _dbContext.AddAsync(processTaskDefinition);
             await _dbContext.SaveChangesAsync();
             return Ok(addedProcessTaskDefinition.Entity);
+        }
+
+        private async Task SendStartTaskMessage(Process process) { 
+
         }
     }
 }
